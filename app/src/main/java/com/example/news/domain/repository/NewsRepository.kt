@@ -7,4 +7,6 @@ interface NewsRepository {
 
     fun getTopHeadLinesNews() : LiveData<List<NewsEntity>>
 
+    suspend fun loadTopHeadlinesNewsData()
+
 }

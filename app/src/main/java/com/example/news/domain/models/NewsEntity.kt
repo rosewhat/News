@@ -1,7 +1,7 @@
 package com.example.news.domain.models
 
 data class NewsEntity(
-    val source: SourceEntity,
+    val id: Int,
     val author: String,
     val title: String,
     val description: String,
