@@ -3,12 +3,11 @@ package com.example.news.data.mapper
 import com.example.news.data.database.models.NewsInfoDbModel
 import com.example.news.data.models.NewsInfoDto
 import com.example.news.domain.models.NewsEntity
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class NewsMapper {
-
-    // посмотреть тут еще
-
     fun mapDtoToDbModel(dto: NewsInfoDto) = NewsInfoDbModel(
         id = 0,
         author = dto.author,
@@ -27,9 +26,17 @@ class NewsMapper {
         description = model.description,
         url = model.url,
         urlToImage = model.urlToImage,
-        publishedAt = model.publishedAt,
+        publishedAt = convertTime(model.publishedAt),
         content = model.content
     )
+
+    private fun convertTime(published: String): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        val date = dateFormat.parse(published)
+        val outputFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
+        return outputFormat.format(date)
+    }
+
 
 }
 

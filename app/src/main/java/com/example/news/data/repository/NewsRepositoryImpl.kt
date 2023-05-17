@@ -2,7 +2,6 @@ package com.example.news.data.repository
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import com.example.news.data.database.AppDatabase
 import com.example.news.data.mapper.NewsMapper
@@ -16,6 +15,8 @@ import androidx.lifecycle.Transformations
 class NewsRepositoryImpl(
     private val application: Application
 ) : NewsRepository {
+
+
     private val newsInfoDao = AppDatabase.getInstance(application).newsInfoDao()
     private val apiService = ApiFactory.apiService
     private val mapper = NewsMapper()
@@ -27,6 +28,11 @@ class NewsRepositoryImpl(
         }
     }
 
+    override fun getDetailTopHeadlinesNewsUseCase(id: String): LiveData<NewsEntity> {
+        return Transformations.map(newsInfoDao.getDetailTopNews(id = id)) {
+           mapper.mapDbModelToEntity(it)
+        }
+    }
     override suspend fun loadTopHeadlinesNewsData() {
         while (true) {
             try {
@@ -37,7 +43,11 @@ class NewsRepositoryImpl(
             } catch (e: Exception) {
                 Log.d("ERROR_INT", e.message.toString())
             }
-            delay(10000)
+            delay(900000)
         }
+    }
+
+    override suspend fun deleteChoiceNewsFromListUseCase(newsEntity: NewsEntity) {
+       // newsInfoDao.deleteNews()
     }
 }
