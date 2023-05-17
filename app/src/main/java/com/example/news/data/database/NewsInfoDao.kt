@@ -2,6 +2,7 @@ package com.example.news.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -11,13 +12,16 @@ import com.example.news.data.database.models.NewsInfoDbModel
 interface NewsInfoDao {
 
     @Query("SELECT * FROM full_news ORDER BY publishedAt")
-    fun getTopNewsList() : LiveData<List<NewsInfoDbModel>>
+    fun getTopNewsList(): LiveData<List<NewsInfoDbModel>>
+
+    @Query("SELECT * FROM full_news WHERE id == :id LIMIT 1")
+    fun getDetailTopNews(id: String): LiveData<NewsInfoDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewsList(priceList: List<NewsInfoDbModel>)
 
-    // TODO: add method delete
-
+    @Delete
+    suspend fun deleteNews(newsInfoDbModel: NewsInfoDbModel)
 
 
 }
