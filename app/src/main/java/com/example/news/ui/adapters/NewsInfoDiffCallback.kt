@@ -5,7 +5,7 @@ import com.example.news.domain.models.NewsEntity
 
 object NewsInfoDiffCallback : DiffUtil.ItemCallback<NewsEntity>() {
     override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.author == newItem.author
     }
 
     override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {

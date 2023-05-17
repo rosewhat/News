@@ -21,5 +21,5 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             loadTopHeadlinesNewsDataUseCase()
     }
 
-    fun getDetailNewsInfo(id: String) = getDetailTopHeadlinesNewsUseCase(id = id)
+    fun getDetailNewsInfo(author: String) = getDetailTopHeadlinesNewsUseCase(author = author)
 }

@@ -51,9 +51,9 @@ class ListTopNewsFragment : Fragment() {
         newsAdapter.onNewsClickListener = object : NewsAdapter.OnNewsClickListener {
             override fun onNewsClick(news: NewsEntity) {
                 if (binding.fragmentContainer == null) {
-                    launchDetailNewsInfoFragment(news.id.toString())
+                    launchDetailNewsInfoFragment(news.author.toString())
                 } else {
-                    albomlaunchDetailNewsInfoFragment(news.id.toString())
+                    albomlaunchDetailNewsInfoFragment(news.author)
                 }
             }
 

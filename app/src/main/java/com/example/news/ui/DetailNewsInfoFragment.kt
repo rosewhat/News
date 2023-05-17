@@ -64,17 +64,17 @@ class DetailNewsInfoFragment : Fragment() {
     }
 
     private fun getParamId(): String {
-        return requireArguments().getString(EXTRA_ID, DEFAULT_VALUE)
+        return requireArguments().getString(EXTRA_AUTHOR, DEFAULT_VALUE)
     }
 
     companion object {
-        private const val EXTRA_ID = "id"
+        private const val EXTRA_AUTHOR = "author"
         private const val DEFAULT_VALUE = ""
 
-        fun newInstance(id: String): Fragment {
+        fun newInstance(author: String): Fragment {
             return DetailNewsInfoFragment().apply {
                 arguments = Bundle().apply {
-                    putString(EXTRA_ID, id)
+                    putString(EXTRA_AUTHOR, author)
                 }
             }
         }

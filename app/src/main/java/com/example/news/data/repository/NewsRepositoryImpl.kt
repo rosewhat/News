@@ -28,8 +28,8 @@ class NewsRepositoryImpl(
         }
     }
 
-    override fun getDetailTopHeadlinesNewsUseCase(id: String): LiveData<NewsEntity> {
-        return Transformations.map(newsInfoDao.getDetailTopNews(id = id)) {
+    override fun getDetailTopHeadlinesNewsUseCase(author: String): LiveData<NewsEntity> {
+        return Transformations.map(newsInfoDao.getDetailTopNews(author = author)) {
             mapper.mapDbModelToEntity(it)
         }
     }
