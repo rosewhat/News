@@ -5,8 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "full_news")
 data class NewsInfoDbModel(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
     val author: String,
     val title: String,
     val description: String,

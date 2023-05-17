@@ -9,7 +9,6 @@ import java.util.Locale
 
 class NewsMapper {
     fun mapDtoToDbModel(dto: NewsInfoDto) = NewsInfoDbModel(
-        id = 0,
         author = dto.author,
         title = dto.title,
         description = dto.description,
@@ -20,7 +19,6 @@ class NewsMapper {
     )
 
     fun mapDbModelToEntity(model: NewsInfoDbModel) = NewsEntity(
-        id = model.id,
         author = model.author,
         title = model.title,
         description = model.description,
