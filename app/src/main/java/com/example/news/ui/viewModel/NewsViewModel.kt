@@ -18,9 +18,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val newsInfoList = getTopHeadLinesNewsUseCase()
 
     init {
-        viewModelScope.launch {
             loadTopHeadlinesNewsDataUseCase()
-        }
     }
 
     fun getDetailNewsInfo(id: String) = getDetailTopHeadlinesNewsUseCase(id = id)

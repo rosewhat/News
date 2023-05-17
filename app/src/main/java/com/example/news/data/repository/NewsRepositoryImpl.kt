@@ -10,15 +10,15 @@ import com.example.news.domain.models.NewsEntity
 import com.example.news.domain.repository.NewsRepository
 import kotlinx.coroutines.delay
 import androidx.lifecycle.Transformations
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
+import com.example.news.workers.RefreshDataWorker
 
 
 class NewsRepositoryImpl(
     private val application: Application
 ) : NewsRepository {
-
-
     private val newsInfoDao = AppDatabase.getInstance(application).newsInfoDao()
-    private val apiService = ApiFactory.apiService
     private val mapper = NewsMapper()
     override fun getTopHeadLinesNews(): LiveData<List<NewsEntity>> {
         return Transformations.map(newsInfoDao.getTopNewsList()) {
@@ -30,24 +30,20 @@ class NewsRepositoryImpl(
 
     override fun getDetailTopHeadlinesNewsUseCase(id: String): LiveData<NewsEntity> {
         return Transformations.map(newsInfoDao.getDetailTopNews(id = id)) {
-           mapper.mapDbModelToEntity(it)
-        }
-    }
-    override suspend fun loadTopHeadlinesNewsData() {
-        while (true) {
-            try {
-                val topNews = apiService.getTopHeadLinesNews()
-                val dbModelList = topNews.newsInfoDto.map { mapper.mapDtoToDbModel(it) }
-                Log.d("API_RESPONSE", topNews.toString())
-                newsInfoDao.insertNewsList(dbModelList)
-            } catch (e: Exception) {
-                Log.d("ERROR_INT", e.message.toString())
-            }
-            delay(900000)
+            mapper.mapDbModelToEntity(it)
         }
     }
 
+    override fun loadTopHeadlinesNewsData() {
+        val workManager = WorkManager.getInstance(application)
+        workManager.enqueueUniqueWork(
+            RefreshDataWorker.NAME,
+            ExistingWorkPolicy.REPLACE,
+            RefreshDataWorker.makeRequest()
+        )
+    }
+
     override suspend fun deleteChoiceNewsFromListUseCase(newsEntity: NewsEntity) {
-       // newsInfoDao.deleteNews()
+        // newsInfoDao.deleteNews()
     }
 }
