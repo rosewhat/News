@@ -8,7 +8,7 @@ interface NewsRepository {
     fun getTopHeadLinesNews(): LiveData<List<NewsEntity>>
 
     fun getDetailTopHeadlinesNewsUseCase(id: String): LiveData<NewsEntity>
-    suspend fun loadTopHeadlinesNewsData()
+     fun loadTopHeadlinesNewsData()
 
     suspend fun deleteChoiceNewsFromListUseCase(newsEntity: NewsEntity)
 
