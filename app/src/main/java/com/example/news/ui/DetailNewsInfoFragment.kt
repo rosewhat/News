@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.news.databinding.FragmentDetailNewsInfoBinding
-import com.example.news.domain.models.NewsEntity
 import com.example.news.ui.viewModel.NewsViewModel
 import com.squareup.picasso.Picasso
 

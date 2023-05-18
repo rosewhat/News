@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.news.data.database.AppDatabase
 import com.example.news.data.mapper.NewsMapper
@@ -24,14 +23,15 @@ class RefreshDataWorker(
             try {
                 val topNews = apiService.getTopHeadLinesNews()
                 val dbModelList = topNews.newsInfoDto.map { mapper.mapDtoToDbModel(it) }
-                Log.d("API_RESPONSE", topNews.toString())
                 newsInfoDao.insertNewsList(dbModelList)
             } catch (e: Exception) {
                 Log.d("ERROR_INT", e.message.toString())
             }
-            delay(900000)
+            delay(10000)
         }
     }
+
+
 
     companion object {
         const val NAME = "RefreshDataWorker"

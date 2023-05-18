@@ -1,19 +1,15 @@
 package com.example.news.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.news.R
-import com.example.news.databinding.ActivityMainBinding
-import com.example.news.databinding.FragmentDetailNewsInfoBinding
 import com.example.news.databinding.FragmentListTopNewsBinding
-import com.example.news.domain.models.NewsEntity
 import com.example.news.ui.adapters.NewsAdapter
 import com.example.news.ui.viewModel.NewsViewModel
 
@@ -21,6 +17,8 @@ import com.example.news.ui.viewModel.NewsViewModel
 class ListTopNewsFragment : Fragment() {
 
     private var _binding: FragmentListTopNewsBinding? = null
+    private lateinit var newsAdapter: NewsAdapter
+
     private val binding: FragmentListTopNewsBinding
         get() = _binding ?: throw RuntimeException("ListTopNewsFragment is null")
 
@@ -40,27 +38,40 @@ class ListTopNewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter()
         binding.rvCoinPriceList.adapter = newsAdapter
-        binding.rvCoinPriceList.itemAnimator = null
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         viewModel.newsInfoList.observe(viewLifecycleOwner) {
             newsAdapter.submitList(it)
         }
 
-        newsAdapter.onNewsClickListener = object : NewsAdapter.OnNewsClickListener {
-            override fun onNewsClick(news: NewsEntity) {
-                if (binding.fragmentContainer == null) {
-                    launchDetailNewsInfoFragment(news.author.toString())
-                } else {
-                    albomlaunchDetailNewsInfoFragment(news.author)
-                }
-            }
 
-            override fun onDeleteNewsClick(news: NewsEntity) {
-                TODO("Not yet implemented")
+        newsAdapter.onNewsClickListener = {
+            if (binding.fragmentContainer == null) {
+                launchDetailNewsInfoFragment(it.author)
+            } else {
+                albumLaunchDetailNewsInfoFragment(it.author)
             }
         }
+
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteChoiceNewsFromListUseCase(newsAdapter.currentList[viewHolder.adapterPosition])
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(binding.rvCoinPriceList)
 
         binding.searchNews?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -73,21 +84,24 @@ class ListTopNewsFragment : Fragment() {
                 return false
             }
         })
-
-
     }
 
-
-    private fun albomlaunchDetailNewsInfoFragment(id: String) {
+    private fun albumLaunchDetailNewsInfoFragment(id: String) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, DetailNewsInfoFragment.newInstance(id))
             .addToBackStack(null)
             .commit()
     }
 
-    private fun launchDetailNewsInfoFragment(id: String) {
+    private fun launchDetailNewsInfoFragment(author: String) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, DetailNewsInfoFragment.newInstance(id))
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.main_container, DetailNewsInfoFragment.newInstance(author))
             .addToBackStack(null)
             .commit()
     }
