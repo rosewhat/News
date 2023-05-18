@@ -26,11 +26,13 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
+        android:name="com.example.news.ui.ListTopNewsFragment"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/middle_of_screen"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="0dp"/>
+        tools:layout="@layout/fragment_detail_news_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

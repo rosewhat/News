@@ -17,12 +17,11 @@ import com.example.news.ui.viewModel.NewsViewModel
 class ListTopNewsFragment : Fragment() {
 
     private var _binding: FragmentListTopNewsBinding? = null
-    private lateinit var newsAdapter: NewsAdapter
-
     private val binding: FragmentListTopNewsBinding
-        get() = _binding ?: throw RuntimeException("ListTopNewsFragment is null")
+        get() = _binding ?: throw RuntimeException(FRAGMENT_ERROR)
 
     private lateinit var viewModel: NewsViewModel
+    private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +40,30 @@ class ListTopNewsFragment : Fragment() {
         newsAdapter = NewsAdapter()
         binding.rvCoinPriceList.adapter = newsAdapter
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+        setDataInList()
+        setupClickListener()
+        setupSwipeListener()
+
+        binding.searchNews?.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun setDataInList() {
         viewModel.newsInfoList.observe(viewLifecycleOwner) {
             newsAdapter.submitList(it)
         }
+    }
 
-
-        newsAdapter.onNewsClickListener = {
-            if (binding.fragmentContainer == null) {
-                launchDetailNewsInfoFragment(it.author)
-            } else {
-                albumLaunchDetailNewsInfoFragment(it.author)
-            }
-        }
-
+    private fun setupSwipeListener() {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
@@ -72,18 +82,16 @@ class ListTopNewsFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.rvCoinPriceList)
+    }
 
-        binding.searchNews?.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+    private fun setupClickListener() {
+        newsAdapter.onNewsClickListener = {
+            if (binding.fragmentContainer == null) {
+                launchDetailNewsInfoFragment(it.author)
+            } else {
+                albumLaunchDetailNewsInfoFragment(it.author)
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+        }
     }
 
     private fun albumLaunchDetailNewsInfoFragment(id: String) {
@@ -104,6 +112,10 @@ class ListTopNewsFragment : Fragment() {
             .replace(R.id.main_container, DetailNewsInfoFragment.newInstance(author))
             .addToBackStack(null)
             .commit()
+    }
+
+    companion object {
+        private const val FRAGMENT_ERROR = "ListTopNewsFragment is null"
     }
 
     override fun onDestroyView() {
