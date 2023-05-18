@@ -1,6 +1,7 @@
 package com.example.news.data.mapper
 
 import com.example.news.data.database.models.NewsInfoDbModel
+import com.example.news.data.database.models.NewsLikeInfoDbModel
 import com.example.news.data.models.NewsInfoDto
 import com.example.news.domain.models.NewsEntity
 import java.text.SimpleDateFormat
@@ -38,11 +39,32 @@ class NewsMapper {
         content = newsEntity.content
     )
 
+    fun mapLikeEntityToDbModel(newsEntity: NewsEntity) = NewsLikeInfoDbModel(
+        author = newsEntity.author,
+        title = newsEntity.title,
+        description = newsEntity.description,
+        url = newsEntity.url,
+        urlToImage = newsEntity.urlToImage,
+        publishedAt = newsEntity.publishedAt,
+        content = newsEntity.content
+    )
+
+    fun mapDbModelToLikeEntity(model: NewsLikeInfoDbModel) = NewsEntity(
+        author = model.author,
+        title = model.title,
+        description = model.description,
+        url = model.url,
+        urlToImage = model.urlToImage,
+        publishedAt = model.publishedAt,
+        content = model.content
+    )
+
+
     private fun convertTime(published: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val date = dateFormat.parse(published)
         val outputFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
-        return outputFormat.format(date?: "No Time")
+        return outputFormat.format(date ?: "No Time")
     }
 
 

@@ -8,5 +8,6 @@
     <string name="button_read_full_news">Read full news</string>
     <string name="textView_detail_title">Detail</string>
     <string name="textView_detail_by_author">by</string>
+    <string name="textView_like_news">Favorite</string>
 
 </resources>

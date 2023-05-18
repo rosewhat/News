@@ -1,4 +1,4 @@
-package com.example.news.ui.adapters
+package com.example.news.ui.adapters.top_headlines
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.news.databinding.ItemNewsInfoBinding

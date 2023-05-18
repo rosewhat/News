@@ -1,6 +1,7 @@
 package com.example.news.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.news.R
 import com.example.news.databinding.FragmentListTopNewsBinding
-import com.example.news.ui.adapters.NewsAdapter
+import com.example.news.ui.adapters.top_headlines.NewsAdapter
 import com.example.news.ui.viewModel.NewsViewModel
 
 
@@ -25,6 +26,7 @@ class ListTopNewsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("ListTopNewsFragment", "onCreate")
     }
 
     override fun onCreateView(
@@ -37,14 +39,18 @@ class ListTopNewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("ListTopNewsFragment", "onViewCreated")
+        viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         newsAdapter = NewsAdapter()
         binding.rvCoinPriceList.adapter = newsAdapter
-        viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         setDataInList()
         setupClickListener()
         setupSwipeListener()
+        binding.btLaunchFavoriteFragment.setOnClickListener {
+            launchFavoriteNewsInfoFragment()
+        }
 
-        binding.searchNews?.setOnQueryTextListener(object :
+        binding.searchNews.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -55,6 +61,13 @@ class ListTopNewsFragment : Fragment() {
                 return false
             }
         })
+        newsAdapter.onNewsClickListener = {
+            if (binding.fragmentContainerLandscape == null) {
+                launchDetailNewsInfoFragment(it.author)
+            } else {
+                albumLaunchDetailNewsInfoFragment(it.author)
+            }
+        }
     }
 
     private fun setDataInList() {
@@ -85,18 +98,20 @@ class ListTopNewsFragment : Fragment() {
     }
 
     private fun setupClickListener() {
+
         newsAdapter.onNewsClickListener = {
-            if (binding.fragmentContainer == null) {
-                launchDetailNewsInfoFragment(it.author)
-            } else {
-                albumLaunchDetailNewsInfoFragment(it.author)
-            }
+            launchDetailNewsInfoFragment(it.author)
+        }
+
+        newsAdapter.onLikeNewsLongClickListener = {
+            viewModel.insertLikeNews(it)
+            Log.d("LIKE_NEWS", it.toString())
         }
     }
 
-    private fun albumLaunchDetailNewsInfoFragment(id: String) {
+    private fun albumLaunchDetailNewsInfoFragment(author: String) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, DetailNewsInfoFragment.newInstance(id))
+            .replace(R.id.fragmentContainerLandscape, DetailNewsInfoFragment.newInstance(author))
             .addToBackStack(null)
             .commit()
     }
@@ -110,6 +125,19 @@ class ListTopNewsFragment : Fragment() {
                 R.anim.slide_out_right
             )
             .replace(R.id.main_container, DetailNewsInfoFragment.newInstance(author))
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun launchFavoriteNewsInfoFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.main_container, FavoriteNewsFragment.newInstance())
             .addToBackStack(null)
             .commit()
     }

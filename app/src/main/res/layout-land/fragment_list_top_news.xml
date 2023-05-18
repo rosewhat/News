@@ -6,16 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".ui.ListTopNewsFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchNews"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="@id/middle_of_screen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryBackground="@android:color/transparent"
+        app:queryHint="Search here ..." />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCoinPriceList"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/middle_of_screen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchNews"
         tools:listitem="@layout/item_news_info" />
+
+    <Button
+        android:id="@+id/btLaunchFavoriteFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#00BCD4"
+        android:text="Favorite News"
+        app:layout_constraintBottom_toBottomOf="@+id/rvCoinPriceList"
+        app:layout_constraintEnd_toEndOf="@id/middle_of_screen"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/middle_of_screen"
@@ -25,14 +53,13 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
-        android:name="com.example.news.ui.ListTopNewsFragment"
+        android:id="@+id/fragmentContainerLandscape"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/middle_of_screen"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_detail_news_info" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

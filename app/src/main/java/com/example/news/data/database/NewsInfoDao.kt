@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.news.data.database.models.NewsInfoDbModel
+import com.example.news.data.database.models.NewsLikeInfoDbModel
 
 @Dao
 interface NewsInfoDao {
@@ -23,5 +24,12 @@ interface NewsInfoDao {
     @Delete
     suspend fun deleteNews(newsInfoDbModel: NewsInfoDbModel)
 
+    @Query("SELECT * FROM like_news ORDER BY publishedAt")
+    fun getLikeNewsList(): LiveData<List<NewsLikeInfoDbModel>>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLikeNews(likeItem: NewsLikeInfoDbModel)
+
+    @Delete
+    suspend fun deleteLikeNews(newsLikeInfoDbModel: NewsLikeInfoDbModel)
 }
