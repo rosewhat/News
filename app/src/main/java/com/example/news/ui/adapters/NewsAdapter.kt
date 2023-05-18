@@ -11,7 +11,7 @@ import com.example.news.domain.models.NewsEntity
 import com.squareup.picasso.Picasso
 
 class NewsAdapter : ListAdapter<NewsEntity, NewsViewHolder>(NewsInfoDiffCallback) {
-    var onNewsClickListener: OnNewsClickListener? = null
+    var onNewsClickListener: ((NewsEntity) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val binding =
             ItemNewsInfoBinding.inflate(
@@ -32,21 +32,10 @@ class NewsAdapter : ListAdapter<NewsEntity, NewsViewHolder>(NewsInfoDiffCallback
                 Picasso.get().load(news.urlToImage)
                     .into(holder.itemView.findViewById<ImageView>(R.id.ivNews))
                 holder.itemView.setOnClickListener {
-                    onNewsClickListener?.onNewsClick(this)
+                    onNewsClickListener?.invoke(this)
                 }
-                holder.itemView.setOnLongClickListener {
-                    onNewsClickListener?.onDeleteNewsClick(news)
-                    true
-                }
+
             }
         }
-
-
     }
-
-    interface OnNewsClickListener {
-        fun onNewsClick(news: NewsEntity)
-        fun onDeleteNewsClick(news: NewsEntity)
-    }
-
 }

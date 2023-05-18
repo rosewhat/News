@@ -28,6 +28,16 @@ class NewsMapper {
         content = model.content
     )
 
+    fun mapEntityToDbModel(newsEntity: NewsEntity) = NewsInfoDbModel(
+        author = newsEntity.author,
+        title = newsEntity.title,
+        description = newsEntity.description,
+        url = newsEntity.url,
+        urlToImage = newsEntity.urlToImage,
+        publishedAt = newsEntity.publishedAt,
+        content = newsEntity.content
+    )
+
     private fun convertTime(published: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val date = dateFormat.parse(published)
