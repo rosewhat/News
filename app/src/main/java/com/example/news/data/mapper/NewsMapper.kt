@@ -42,7 +42,7 @@ class NewsMapper {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val date = dateFormat.parse(published)
         val outputFormat = SimpleDateFormat("MMMM dd", Locale.getDefault())
-        return outputFormat.format(date)
+        return outputFormat.format(date?: "No Time")
     }
 
 

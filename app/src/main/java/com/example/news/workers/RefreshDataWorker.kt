@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 class RefreshDataWorker(
     context: Context,
     workerParams: WorkerParameters
-)  : CoroutineWorker(appContext = context, params = workerParams) {
+) : CoroutineWorker(appContext = context, params = workerParams) {
     private val newsInfoDao = AppDatabase.getInstance(context).newsInfoDao()
     private val apiService = ApiFactory.apiService
     private val mapper = NewsMapper()
@@ -25,18 +25,17 @@ class RefreshDataWorker(
                 val dbModelList = topNews.newsInfoDto.map { mapper.mapDtoToDbModel(it) }
                 newsInfoDao.insertNewsList(dbModelList)
             } catch (e: Exception) {
-                Log.d("ERROR_INT", e.message.toString())
+                Log.d(LOG_ERROR_INT, e.message.toString())
             }
             delay(10000)
         }
     }
 
-
-
     companion object {
         const val NAME = "RefreshDataWorker"
+        const val LOG_ERROR_INT = "ERROR_INT"
 
-        fun makeRequest() : OneTimeWorkRequest {
+        fun makeRequest(): OneTimeWorkRequest {
             return OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
         }
     }

@@ -17,7 +17,7 @@ class DetailNewsInfoFragment : Fragment() {
 
     private var _binding: FragmentDetailNewsInfoBinding? = null
     private val binding: FragmentDetailNewsInfoBinding
-        get() = _binding ?: throw RuntimeException("DetailNewsInfoFragment is null")
+        get() = _binding ?: throw RuntimeException(FRAGMENT_ERROR)
 
     private lateinit var viewModel: NewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +35,10 @@ class DetailNewsInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+        getDetailDataFromViewModel()
+    }
+
+    private fun getDetailDataFromViewModel() {
         val id = getParamId()
         viewModel.getDetailNewsInfo(id).observe(viewLifecycleOwner) { info ->
             with(binding) {
@@ -48,9 +52,9 @@ class DetailNewsInfoFragment : Fragment() {
                 ivDetailNewsRepost.setOnClickListener {
                     val sendIntent = Intent(Intent.ACTION_SEND).apply {
                         putExtra(Intent.EXTRA_TEXT, tvDetailContent.text.toString())
-                        type = "text/plain"
+                        type = TYPE_SEND_INTENT
                     }
-                    startActivity(Intent.createChooser(sendIntent, "Share using"))
+                    startActivity(Intent.createChooser(sendIntent, SHARE_TITLE))
                 }
                 Picasso.get().load(info.urlToImage).into(ivDetailNews)
             }
@@ -69,6 +73,9 @@ class DetailNewsInfoFragment : Fragment() {
     companion object {
         private const val EXTRA_AUTHOR = "author"
         private const val DEFAULT_VALUE = ""
+        private const val SHARE_TITLE = "Share using"
+        private const val TYPE_SEND_INTENT = "text/plain"
+        private const val FRAGMENT_ERROR = "DetailNewsInfoFragment is null"
 
         fun newInstance(author: String): Fragment {
             return DetailNewsInfoFragment().apply {
