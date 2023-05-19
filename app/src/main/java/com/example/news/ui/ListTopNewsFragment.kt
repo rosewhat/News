@@ -1,7 +1,6 @@
 package com.example.news.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +16,12 @@ import com.example.news.ui.viewModel.RoleModelViewModel
 
 
 class ListTopNewsFragment : Fragment() {
-
     private var _binding: FragmentListTopNewsBinding? = null
     private val binding: FragmentListTopNewsBinding
         get() = _binding ?: throw RuntimeException(FRAGMENT_ERROR)
+
+    private var currentQuery: String = ""
+
 
     private lateinit var viewModel: NewsViewModel
     private lateinit var viewModelRole: RoleModelViewModel
@@ -35,7 +36,6 @@ class ListTopNewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("ListTopNewsFragment", "onViewCreated")
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         viewModelRole = ViewModelProvider(this)[RoleModelViewModel::class.java]
         newsAdapter = NewsAdapter()
@@ -69,7 +69,9 @@ class ListTopNewsFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+                currentQuery = newText.orEmpty()
+                setDataInList()
+                return true
             }
         })
         newsAdapter.onNewsClickListener = {
@@ -81,9 +83,16 @@ class ListTopNewsFragment : Fragment() {
         }
     }
 
+
     private fun setDataInList() {
-        viewModel.newsInfoList.observe(viewLifecycleOwner) {
-            newsAdapter.submitList(it)
+        viewModel.newsInfoList.observe(viewLifecycleOwner) { newsList ->
+            if (currentQuery.isEmpty()) {
+                newsAdapter.updateNewsListFiltered(newsList)
+            } else {
+                val filteredList =
+                    newsList.filter { it.title.contains(currentQuery, ignoreCase = true) }
+                newsAdapter.updateNewsListFiltered(filteredList)
+            }
         }
     }
 
@@ -104,9 +113,11 @@ class ListTopNewsFragment : Fragment() {
             }
         }
 
+
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.rvCoinPriceList)
     }
+
 
     private fun setupClickListener() {
         newsAdapter.onNewsClickListener = {
@@ -114,7 +125,6 @@ class ListTopNewsFragment : Fragment() {
         }
         newsAdapter.onLikeNewsLongClickListener = {
             viewModel.insertLikeNews(it)
-            Log.d("LIKE_NEWS", it.toString())
         }
     }
 
@@ -163,16 +173,17 @@ class ListTopNewsFragment : Fragment() {
             .commit()
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         private const val FRAGMENT_ERROR = "ListTopNewsFragment is null"
         fun newInstance(): Fragment {
             return ListTopNewsFragment()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

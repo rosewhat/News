@@ -32,4 +32,7 @@ interface NewsInfoDao {
 
     @Delete
     suspend fun deleteLikeNews(newsLikeInfoDbModel: NewsLikeInfoDbModel)
+
+    @Query("SELECT * FROM full_news WHERE title LIKE '%' || :query || '%'")
+    fun searchNews(query: String): LiveData<List<NewsInfoDbModel>>
 }

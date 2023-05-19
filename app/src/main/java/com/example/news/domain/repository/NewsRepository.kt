@@ -12,4 +12,6 @@ interface NewsRepository {
 
     suspend fun deleteChoiceNewsFromListUseCase(newsEntity: NewsEntity)
 
+    fun searchNewsOnTheListUseCase(query: String): LiveData<List<NewsEntity>>
+
 }
