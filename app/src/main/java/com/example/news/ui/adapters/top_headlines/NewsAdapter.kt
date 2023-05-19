@@ -50,4 +50,7 @@ class NewsAdapter : ListAdapter<NewsEntity, NewsViewHolder>(NewsInfoDiffCallback
     private fun showSnackBar(view: View, message: String) {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
+    fun updateNewsListFiltered(newsList: List<NewsEntity>) {
+        submitList(newsList)
+    }
 }

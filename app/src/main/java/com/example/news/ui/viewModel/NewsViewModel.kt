@@ -12,6 +12,7 @@ import com.example.news.domain.usecases.GetLikeNewsUseCase
 import com.example.news.domain.usecases.GetTopHeadLinesNewsUseCase
 import com.example.news.domain.usecases.InsertLikeNewsInListUseCase
 import com.example.news.domain.usecases.LoadTopHeadlinesNewsDataUseCase
+import com.example.news.domain.usecases.SearchNewsOnTheListUseCase
 import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,6 +25,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val getLikeNewsInListUseCase = GetLikeNewsUseCase(likeRepository)
     private val deleteChoiceLikeNewsFromListUseCase =
         DeleteChoiceLikeNewsFromListUseCase(likeRepository)
+
+    private val searchNewsOnTheListUseCase = SearchNewsOnTheListUseCase(repository)
 
 
     val newsInfoList = getTopHeadLinesNewsUseCase()
@@ -38,7 +41,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteChoiceNewsFromListUseCase(news: NewsEntity) {
         viewModelScope.launch {
-           repository.deleteChoiceNewsFromListUseCase(news)
+            repository.deleteChoiceNewsFromListUseCase(news)
         }
     }
 
@@ -54,7 +57,5 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
-
-
+    fun searchNews(query: String) = searchNewsOnTheListUseCase(query)
 }

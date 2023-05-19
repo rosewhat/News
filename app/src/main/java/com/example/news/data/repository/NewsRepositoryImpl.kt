@@ -43,4 +43,13 @@ class NewsRepositoryImpl(
     override suspend fun deleteChoiceNewsFromListUseCase(newsEntity: NewsEntity) {
         newsInfoDao.deleteNews(mapper.mapEntityToDbModel(newsEntity))
     }
+
+    override fun searchNewsOnTheListUseCase(query: String): LiveData<List<NewsEntity>> {
+        val formattedQuery = "%$query%"
+        return Transformations.map(newsInfoDao.searchNews(formattedQuery)) { it ->
+            it.map {
+                mapper.mapDbModelToEntity(it)
+            }
+        }
+    }
 }
