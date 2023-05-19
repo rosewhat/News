@@ -33,16 +33,25 @@
 
     <Button
         android:id="@+id/btLaunchFavoriteFragment"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#00BCD4"
         android:text="Favorite News"
         app:layout_constraintBottom_toBottomOf="@+id/rvCoinPriceList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/btnSignOutFromAccount" />
+
+    <Button
+        android:id="@+id/btnSignOutFromAccount"
+        app:layout_constraintEnd_toStartOf="@id/btLaunchFavoriteFragment"
+        app:layout_constraintBottom_toBottomOf="@id/rvCoinPriceList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="#F44336"
+        android:text="Sign out" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

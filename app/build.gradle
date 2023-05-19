@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'org.jetbrains.dokka'
+    id 'com.google.gms.google-services'
 
 }
 
@@ -49,6 +50,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
     implementation "androidx.room:room-runtime:2.5.1"
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     kapt "androidx.room:room-compiler:2.5.1"
 
     implementation "androidx.room:room-ktx:2.5.1"
