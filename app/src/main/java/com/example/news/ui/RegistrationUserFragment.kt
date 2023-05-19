@@ -31,28 +31,32 @@ class RegistrationUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[RoleModelViewModel::class.java]
-        binding.tvRegistrationLaunchToLoginFragment.setOnClickListener {
-            launchLoginUserFragment()
-        }
+        showLoginFragment()
+        registrationNewUser()
+    }
+
+    private fun registrationNewUser() {
         binding.btRegistrationAccount.setOnClickListener {
             val email = binding.etRegistrationEmail.text.toString()
             val password = binding.etRegistrationPassword.text.toString()
-            if (email.isNotEmpty() && !password.isEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.registrationNewUser(email, password)
                 viewModel.getRegisterStatusLiveData().observe(viewLifecycleOwner) {
                     if (it == true) {
                         launchListTopNewsFragment()
                     } else {
-                        Toast.makeText(
-                            requireContext().applicationContext,
-                            "Change data",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnackBar(REGISTRATION_USER_DATA_ERROR)
                     }
                 }
             } else {
-                showSnackBar("Not enough data")
+                showSnackBar(REGISTRATION_EMPTY_DATA)
             }
+        }
+    }
+
+    private fun showLoginFragment() {
+        binding.tvRegistrationLaunchToLoginFragment.setOnClickListener {
+            launchLoginUserFragment()
         }
     }
 
@@ -93,6 +97,8 @@ class RegistrationUserFragment : Fragment() {
 
     companion object {
         private const val FRAGMENT_ERROR = "LoginUserFragment is null"
+        private const val REGISTRATION_USER_DATA_ERROR = "Change data"
+        private const val REGISTRATION_EMPTY_DATA = "Not enough data"
         fun newInstance(): Fragment {
             return RegistrationUserFragment()
         }

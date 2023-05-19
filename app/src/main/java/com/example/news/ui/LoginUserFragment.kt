@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.news.R
 import com.example.news.databinding.FragmentLoginUserBinding
@@ -31,28 +30,30 @@ class LoginUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[RoleModelViewModel::class.java]
-        binding.tvLoginLaunchToRegistrationFragment.setOnClickListener {
-            launchRegisterFragment()
-        }
+        showRegisterFragment()
         binding.btLoginInAccount.setOnClickListener {
             val email = binding.etLoginEmail.text.toString()
             val password = binding.etLoginPassword.text.toString()
-            if (email.isNotEmpty() && !password.isEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.authorizationUser(email, password)
                 viewModel.getAuthorizationStatusLiveData().observe(viewLifecycleOwner) {
                     if (it == true) {
                         launchListTopNewsFragment()
                     } else {
-                        Toast.makeText(
-                            requireContext().applicationContext,
-                            "Wrong data",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnackBar(
+                            LOGIN_ERROR_USER_DATA
+                        )
                     }
                 }
             } else {
-                showSnackBar("Not enough data")
+                showSnackBar(LOGIN_EMPTY_DATA)
             }
+        }
+    }
+
+    private fun showRegisterFragment() {
+        binding.tvLoginLaunchToRegistrationFragment.setOnClickListener {
+            launchRegisterFragment()
         }
     }
 
@@ -91,6 +92,9 @@ class LoginUserFragment : Fragment() {
 
     companion object {
         private const val FRAGMENT_ERROR = "LoginUserFragment is null"
+        private const val LOGIN_EMPTY_DATA = "Not enough data"
+        private const val LOGIN_ERROR_USER_DATA = "Wrong data"
+
         fun newInstance(): Fragment {
             return LoginUserFragment()
         }
