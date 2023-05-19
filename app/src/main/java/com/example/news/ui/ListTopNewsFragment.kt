@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -26,12 +25,6 @@ class ListTopNewsFragment : Fragment() {
     private lateinit var viewModel: NewsViewModel
     private lateinit var viewModelRole: RoleModelViewModel
     private lateinit var newsAdapter: NewsAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("ListTopNewsFragment", "onCreate")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,11 +109,9 @@ class ListTopNewsFragment : Fragment() {
     }
 
     private fun setupClickListener() {
-
         newsAdapter.onNewsClickListener = {
             launchDetailNewsInfoFragment(it.author)
         }
-
         newsAdapter.onLikeNewsLongClickListener = {
             viewModel.insertLikeNews(it)
             Log.d("LIKE_NEWS", it.toString())
