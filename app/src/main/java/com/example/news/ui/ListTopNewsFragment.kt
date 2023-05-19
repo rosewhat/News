@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.news.R
 import com.example.news.databinding.FragmentListTopNewsBinding
 import com.example.news.ui.adapters.top_headlines.NewsAdapter
 import com.example.news.ui.viewModel.NewsViewModel
+import com.example.news.ui.viewModel.RoleModelViewModel
 
 
 class ListTopNewsFragment : Fragment() {
@@ -22,6 +24,7 @@ class ListTopNewsFragment : Fragment() {
         get() = _binding ?: throw RuntimeException(FRAGMENT_ERROR)
 
     private lateinit var viewModel: NewsViewModel
+    private lateinit var viewModelRole: RoleModelViewModel
     private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +44,22 @@ class ListTopNewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ListTopNewsFragment", "onViewCreated")
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+        viewModelRole = ViewModelProvider(this)[RoleModelViewModel::class.java]
         newsAdapter = NewsAdapter()
+        viewModelRole.checkCurrentUser()
+        viewModelRole.getCheckStatusLiveData().observe(viewLifecycleOwner) {
+            if (it == false) {
+                launchRegisterFragment()
+            }
+        }
+        binding.btnSignOutFromAccount?.setOnClickListener {
+            viewModelRole.signOutFromAccount()
+            viewModelRole.getSignOutFromAccountLiveData().observe(viewLifecycleOwner) {
+                if (it == true) {
+                    launchRegisterFragment()
+                }
+            }
+        }
         binding.rvCoinPriceList.adapter = newsAdapter
         setDataInList()
         setupClickListener()
@@ -142,8 +160,23 @@ class ListTopNewsFragment : Fragment() {
             .commit()
     }
 
+    private fun launchRegisterFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.main_container, RegistrationUserFragment.newInstance())
+            .commit()
+    }
+
     companion object {
         private const val FRAGMENT_ERROR = "ListTopNewsFragment is null"
+        fun newInstance(): Fragment {
+            return ListTopNewsFragment()
+        }
     }
 
     override fun onDestroyView() {

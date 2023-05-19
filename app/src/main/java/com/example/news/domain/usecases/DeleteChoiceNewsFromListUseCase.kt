@@ -6,5 +6,7 @@ import com.example.news.domain.repository.NewsRepository
 class DeleteChoiceNewsFromListUseCase(
     private val repository: NewsRepository
 ) {
-    suspend operator fun invoke(newsEntity: NewsEntity) = repository.deleteChoiceNewsFromListUseCase(newsEntity)
+    suspend operator fun invoke(
+        newsEntity: NewsEntity
+    ) = repository.deleteChoiceNewsFromListUseCase(newsEntity)
 }
