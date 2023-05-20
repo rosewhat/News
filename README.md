@@ -15,6 +15,9 @@
 * Item List: RecyclerView
 * Authorization: Firebase
 
+## Download App
+[Click to download apk](https://github.com/rosewhat/News/releases)
+
 ## Images
 ![Screenshot_20230520_133626_com example news](https://github.com/rosewhat/News/assets/79806705/abdb89fb-8c33-44f8-bac0-8ea9b44c8728)
 ![Screenshot_20230520_133632_com example news](https://github.com/rosewhat/News/assets/79806705/f5a657ad-e858-4603-ab8b-24a745ff727a)
