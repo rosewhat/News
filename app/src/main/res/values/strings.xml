@@ -19,4 +19,5 @@
     <string name="textVew_registration_description">Sign ip to get started!</string>
     <string name="button_login_user">Log in</string>
     <string name="button_registration_user">Sign up</string>
+    <string name="textView_footer_splash">Mobile application for Samsung</string>
 </resources>
