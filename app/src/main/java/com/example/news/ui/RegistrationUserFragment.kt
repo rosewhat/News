@@ -49,6 +49,7 @@ class RegistrationUserFragment : Fragment() {
                     }
                 }
             } else {
+                binding.etRegistrationEmail.error = "Проверьте данные"
                 showSnackBar(REGISTRATION_EMPTY_DATA)
             }
         }
