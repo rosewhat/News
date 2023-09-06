@@ -82,21 +82,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
-        android:id="@+id/btRegistrationAccount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="40dp"
-        android:backgroundTint="#FF9800"
-        android:fontFamily="@font/open_sans"
-        android:text="@string/button_registration_user"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_registration_password" />
-
     <TextView
         android:id="@+id/tvRegistrationLaunchToLoginFragment"
         android:layout_width="wrap_content"
